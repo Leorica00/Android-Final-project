@@ -27,6 +27,7 @@ class WallpaperPagingSource(
                 nextKey = if (response.body()!!.hits.isEmpty()) null else page + 1
             )
         } catch (e: Exception) {
+
             LoadResult.Error(e)
         }
     }
