@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/wallpaperFragment">
+    app:startDestination="@id/authContainerFragment">
 
     <fragment
         android:id="@+id/testFragment"
@@ -15,4 +15,30 @@
         android:name="com.example.finalproject.presentation.screen.wallpapers.WallpaperFragment"
         android:label="fragment_wallpaper"
         tools:layout="@layout/fragment_wallpaper" />
+    <fragment
+        android:id="@+id/signInFragment"
+        android:name="com.example.finalproject.presentation.screen.sign_in.SignInFragment"
+        android:label="fragment_sign_in"
+        tools:layout="@layout/fragment_sign_in" >
+        <action
+            android:id="@+id/action_signInFragment_to_wallpaperFragment"
+            app:destination="@id/wallpaperFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="com.example.finalproject.presentation.screen.sign_up.SignUpFragment"
+        android:label="fragment_sign_up"
+        tools:layout="@layout/fragment_sign_up" >
+        <action
+            android:id="@+id/action_signUpFragment_to_wallpaperFragment"
+            app:destination="@id/wallpaperFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/authContainerFragment"
+        android:name="com.example.finalproject.presentation.screen.auth.AuthContainerFragment"
+        android:label="AuthContainerFragment" >
+        <action
+            android:id="@+id/action_authContainerFragment_to_wallpaperFragment"
+            app:destination="@id/wallpaperFragment" />
+    </fragment>
 </navigation>
