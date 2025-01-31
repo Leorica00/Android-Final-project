@@ -3,11 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/testFragment">
+    app:startDestination="@id/wallpaperFragment">
 
     <fragment
         android:id="@+id/testFragment"
         android:name="com.example.finalproject.presentation.screen.TestFragment"
         android:label="fragment_test"
         tools:layout="@layout/fragment_test" />
+    <fragment
+        android:id="@+id/wallpaperFragment"
+        android:name="com.example.finalproject.presentation.screen.wallpapers.WallpaperFragment"
+        android:label="fragment_wallpaper"
+        tools:layout="@layout/fragment_wallpaper" />
 </navigation>

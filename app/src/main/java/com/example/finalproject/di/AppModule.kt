@@ -4,6 +4,7 @@ import com.example.finalproject.BuildConfig
 import com.example.finalproject.data.common.response_handler.HandleAuthResponse
 import com.example.finalproject.data.common.response_handler.HandleResponse
 import com.example.finalproject.data.repository.AuthRepositoryImpl
+import com.example.finalproject.data.service.WallpaperApiService
 import com.example.finalproject.domain.repository.AuthRepository
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
@@ -76,4 +77,10 @@ object AppModule {
         auth = Firebase.auth,
         handleAuthResponse = handleAuthResponse
     )
+
+    @Provides
+    @Singleton
+    fun provideWallpaperApiService(retrofit: Retrofit): WallpaperApiService {
+        return retrofit.create(WallpaperApiService::class.java)
+    }
 }
