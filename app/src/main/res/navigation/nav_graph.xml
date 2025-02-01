@@ -41,4 +41,16 @@
             android:id="@+id/action_authContainerFragment_to_wallpaperFragment"
             app:destination="@id/wallpaperFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.finalproject.presentation.screen.profile.ProfileFragment"
+        android:label="ProfileFragment" >
+        <action
+            android:id="@+id/action_profileFragment_to_authContainerFragment"
+            app:destination="@id/authContainerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/categoriesFragment"
+        android:name="com.example.finalproject.presentation.screen.categories.CategoriesFragment"
+        android:label="CategoriesFragment" />
 </navigation>

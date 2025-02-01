@@ -10,4 +10,6 @@ interface AuthRepository {
     suspend fun firebaseSignInWithEmailAndPassword(email: String, password: String): Flow<Resource<Unit>>
     suspend fun updateDisplayName(fullName: String): Flow<Resource<Unit>>
     fun getUser(): FirebaseUser?
+    fun signOut()
+    suspend fun setUserImage(url: String): Flow<Resource<Unit>>
 }
