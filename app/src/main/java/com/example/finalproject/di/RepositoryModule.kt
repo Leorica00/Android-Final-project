@@ -18,5 +18,4 @@ object RepositoryModule {
     @Provides
     fun provideWallpaperRepository(wallpaperApiService: WallpaperApiService): WallpaperRepository =
         WallpaperRepositoryImpl(apiService = wallpaperApiService)
-
 }
