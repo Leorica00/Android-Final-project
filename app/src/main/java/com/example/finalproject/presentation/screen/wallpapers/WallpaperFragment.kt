@@ -1,19 +1,24 @@
 package com.example.finalproject.presentation.screen.wallpapers
 
+import android.util.Log.d
 import android.view.View
 import androidx.core.view.isVisible
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.finalproject.databinding.FragmentWallpaperBinding
 import com.example.finalproject.data.common.AppError
+import com.example.finalproject.presentation.model.category.Categories
 import com.example.finalproject.presentation.base.BaseFragment
 import com.example.finalproject.presentation.event.WallpapersEvent
 import com.example.finalproject.presentation.extension.showSnackBar
+import com.example.finalproject.presentation.model.Image
 import com.example.finalproject.presentation.screen.wallpapers.adapter.WallpapersRecyclerViewAdapter
 import com.example.finalproject.presentation.screen.wallpapers.listener.OnWallpaperClickListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,15 +26,20 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class WallpaperFragment : BaseFragment<FragmentWallpaperBinding>(FragmentWallpaperBinding::inflate) {
+class WallpaperFragment : BaseFragment<FragmentWallpaperBinding>(FragmentWallpaperBinding::inflate),
+    OnWallpaperClickListener {
 
     private val viewModel: WallpaperViewModel by viewModels()
     private val wallpaperRecyclerViewAdapter = WallpapersRecyclerViewAdapter()
 
     override fun setUp() {
+        d("showResult", "hello")
+        getCategory()
         with(binding.recyclerWallpapers) {
             layoutManager = StaggeredGridLayoutManager(3, RecyclerView.VERTICAL)
-            adapter = wallpaperRecyclerViewAdapter
+            adapter = wallpaperRecyclerViewAdapter.apply {
+                setOnWallpaperClickListener(this@WallpaperFragment)
+            }
         }
     }
 
@@ -40,6 +50,7 @@ class WallpaperFragment : BaseFragment<FragmentWallpaperBinding>(FragmentWallpap
     override fun setUpListeners() {
         binding.btnSearch.setOnClickListener {
             wallpaperRecyclerViewAdapter.refresh()
+            viewModel.onEvent(WallpapersEvent.FilterByQueryEvent(searchData()))
         }
     }
 
@@ -67,6 +78,23 @@ class WallpaperFragment : BaseFragment<FragmentWallpaperBinding>(FragmentWallpap
                     binding.progressBarWallpaper.isVisible = loadStates.refresh is LoadState.Loading
                 }
             }
+        }
+    }
+
+
+    override fun onWallpaperClick(image: Image) {
+        findNavController().navigate(
+            WallpaperFragmentDirections.actionWallpaperFragmentToWallpaperDetailsFragment(
+                imageId = image.id
+            )
+        )
+    }
+
+    private fun getCategory() {
+        setFragmentResultListener("credentialsRequest") { _, result ->
+            val category = result.getString("category") ?: Categories.ALL.category
+            wallpaperRecyclerViewAdapter.refresh()
+            viewModel.onEvent(WallpapersEvent.FilterByCategoryEvent(category))
         }
     }
 }

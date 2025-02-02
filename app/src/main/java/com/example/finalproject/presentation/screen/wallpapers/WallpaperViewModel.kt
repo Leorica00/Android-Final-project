@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.example.finalproject.presentation.model.category.Categories
+import com.example.finalproject.domain.usecase.wallpapers.GetWallpapersByFilterUseCase
 import com.example.finalproject.domain.usecase.wallpapers.GetWallpapersUseCase
 import com.example.finalproject.presentation.event.WallpapersEvent
 import com.example.finalproject.presentation.model.Image
@@ -16,6 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class WallpaperViewModel @Inject constructor(
     private val getWallpapersUseCase: GetWallpapersUseCase,
+    private val getWallpapersByFilterUseCase: GetWallpapersByFilterUseCase
 ) : ViewModel() {
 
     private var _pagingDataFlow: MutableSharedFlow<PagingData<Image>> = MutableSharedFlow()
@@ -28,12 +31,30 @@ class WallpaperViewModel @Inject constructor(
     fun onEvent(event: WallpapersEvent) {
         when (event) {
             is WallpapersEvent.FetchDefaultDataEvent -> fetchUsersData()
-            }
+            is WallpapersEvent.FilterByQueryEvent -> filterByQuery(query = event.query)
+            is WallpapersEvent.FilterByCategoryEvent -> filterByCategory(category = event.category)
+        }
     }
 
     private fun fetchUsersData() {
         viewModelScope.launch {
             getWallpapersUseCase().collectLatest {
+                _pagingDataFlow.emit(it)
+            }
+        }
+    }
+
+    private fun filterByCategory(category: String) {
+        viewModelScope.launch {
+            getWallpapersByFilterUseCase(query = "", category = category).collectLatest {
+                _pagingDataFlow.emit(it)
+            }
+        }
+    }
+
+    private fun filterByQuery(query: String) {
+        viewModelScope.launch {
+            getWallpapersByFilterUseCase(query = query, category = Categories.ALL.category).collectLatest {
                 _pagingDataFlow.emit(it)
             }
         }
